@@ -19,3 +19,16 @@ Sadece belirli bir sunucuya istek atmak için ilgili sunucunun adı yazılabilir
 #### Dosya kopyalama
 Sunuculara dosya kopyalamak için aşağıdaki komut çalıştırılabilir.
 > ansible -m copy -a "src=./Test.txt dest=/tmp/Test.txt" all
+
+#### Program yükleme ve silme
+Program yüklemek için aşağıdaki komut çalıştırılabilir.
+> ansible -m yum -a 'name=vim state=present' all
+
+Yüklenen programı kaldırmak için ise aşağıdaki komut çalıştırılabilir.
+> ansible -m yum -a 'name=vim state=absent' all
+
+#### Rol oluşturma
+> ansible-galaxy init role1
+
+#### Playbook çalıştırma
+> ansible-playbook pb.yml
