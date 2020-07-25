@@ -27,6 +27,11 @@ Program yüklemek için aşağıdaki komut çalıştırılabilir.
 Yüklenen programı kaldırmak için ise aşağıdaki komut çalıştırılabilir.
 > ansible -m yum -a 'name=vim state=absent' all
 
+#### Komut çalıştırma
+> ansible -a 'ls' [server name]
+
+> ansible -m shell -a 'ls' [server name]
+
 #### Rol oluşturma
 > ansible-galaxy init role1
 
