@@ -7,8 +7,15 @@ Ansible; Bir veya birden çok sunucuya gerekli yazılımların yüklenmesini ve 
 Centos makinesine kurulum için aşağıdaki komut çalıştırılabilir. Sadece ansible server olarak kullanılacak makineye kurulum yapılmalıdır.
 > sudo  yum install -y ansible
 
+### Sunucular ile iletişim
+
+#### Ping
 Ansible kurulduktan sonra; /etc/ansible/hosts dosyası içerisine erişim yapılacak sunucuların adresleri belirtilmelidir. /etc/ansible/hosts içerisinde gruplayarak tutabileceğimiz sunucu adreslerine başarılı erişimin olduğunu test etmek için ansible tarafından, tüm sunuculara ping komutu aşağıdaki şekilde çalıştırılmıştır.
 > ansible -m ping all
 
 Sadece belirli bir sunucuya istek atmak için ilgili sunucunun adı yazılabilir.
 > ansible -m ping [server name]
+
+#### Dosya kopyalama
+Sunuculara dosya kopyalamak için aşağıdaki komut çalıştırılabilir.
+> ansible -m copy -a "src=./Test.txt dest=/tmp/Test.txt" all
