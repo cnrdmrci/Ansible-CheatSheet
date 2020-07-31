@@ -38,19 +38,113 @@ Yüklenen programı kaldırmak için ise aşağıdaki komut çalıştırılabili
 #### Playbook çalıştırma
 > ansible-playbook pb.yml
 
-#### Ansible Terminoloji
-Ansible server; işlemlerin yürütüldüğü sunucu.
+### Ansible Terminoloji
+Ansible server; İşlemlerin yürütüldüğü sunucu.
 
-Inventory; sunucular hakkında bilgi içeren dosya.
+Inventory; Sunucular hakkında bilgi içeren dosya.
 
-Playbook; işlemlerin otomatikleştirilmesi durumu için hazırlanan YAML dosyası.
+Playbook; İşlemlerin otomatikleştirilmesi durumu için hazırlanan YAML dosyası.
 
-Task; yapılacak tek bir işlemi tanımlayan parça.
+Task; Yapılacak tek bir işlemi tanımlayan parça.
 
-Module; soyutlanması istenen görevler, ayrı bir kısım olarak ele alınır.
+Module; Soyutlanması istenen görevler, ayrı bir kısım olarak ele alınır.
 
-Role; yeniden kullanımı kolaylaştırmak için belirli işlemlerin önceden hazırlanması durumu.
+Role; Yeniden kullanımı kolaylaştırmak için belirli işlemlerin önceden hazırlanması durumu.
 
 Play; playbook dosyasının çalıştırılması.
 
 Facts; Değişkenlerin global olarak saklanması.
+
+Handlers; Servisleri başlatmak, yeniden başlatmak ve durdurmak için kullanılır.
+
+### Ansible Playbook
+İşlemlerin otomatikleştirilmesi hazırlanacak YAML dosyası detay;
+
+##### Tüm sunuculara vim yükler
+```ruby
+---
+- name: playbook name # genel playbook adı
+- hosts: all # ilgili sunucuları belirtir.
+  become: true # komutlari yetkili olarak(sudo) calistirir.
+  tasks: # ilgili görevler
+     - name: Update apt-cache 
+       apt: update_cache=yes
+
+     - name: Install Vim
+       apt: name=vim state=latest
+```
+
+##### Yukarıdaki örnek gibi tüm sunuculara vim yükler
+```ruby
+---
+- hosts: all
+  become: true
+  vars:
+     package: vim
+  tasks:
+     - name: Install Package
+       apt: name={{ package }} state=latest
+```
+
+##### master grubundaki sunuculara vim,git,curl yükler
+```ruby
+---
+- hosts: master
+  become: true
+  tasks:
+     - name: Install Packages
+       apt: name={{ item }} state=latest
+       with_items:
+          - vim
+          - git
+          - curl  
+```
+
+##### debug ile hata bilgisi
+```ruby
+---
+- hosts: all
+  become: true
+  tasks:
+     - name: Install Package
+       register: vim_install
+       apt: name=vim state=present
+       ignore_errors: true
+       
+     - name: vim yuklemesi basarili # bu kisim sadece basarili durumunda calisir.
+       debug: var=vim_install
+       when: vim_install is success
+       
+     - name: vim yuklemesi basarisiz #bu kisim sadece basarisiz durumunda calisir.
+       debug: msg='vim yuklemesi basarisiz'
+       when: vim_install is failed
+```
+
+##### servis işlemleri
+nginx yükleme ve başlatma işlemi;
+```ruby
+---
+- hosts: all
+  become: true
+  tasks:
+     - name: Install Package
+       apt: name=vim state=latest
+  handlers:
+      - name: start nginx
+        service: name=nginx state=started
+```
+nginx durdurma ve silme işlemi;
+```ruby
+---
+- hosts: all
+  become: true
+  tasks:
+  handlers:
+     - name: start nginx
+       service:
+         name: nginx
+         state: stopped
+     - name: Remove nginx
+       apt: name=nginx state=absent
+
+```
