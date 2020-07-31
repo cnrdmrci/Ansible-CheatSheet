@@ -37,3 +37,20 @@ Yüklenen programı kaldırmak için ise aşağıdaki komut çalıştırılabili
 
 #### Playbook çalıştırma
 > ansible-playbook pb.yml
+
+#### Ansible Terminoloji
+Ansible server; işlemlerin yürütüldüğü sunucu.
+
+Inventory; sunucular hakkında bilgi içeren dosya.
+
+Playbook; işlemlerin otomatikleştirilmesi durumu için hazırlanan YAML dosyası.
+
+Task; yapılacak tek bir işlemi tanımlayan parça.
+
+Module; soyutlanması istenen görevler, ayrı bir kısım olarak ele alınır.
+
+Role; yeniden kullanımı kolaylaştırmak için belirli işlemlerin önceden hazırlanması durumu.
+
+Play; playbook dosyasının çalıştırılması.
+
+Facts; Değişkenlerin global olarak saklanması.
