@@ -1,0 +1,15 @@
+[master]
+<ip> ansible_user=master
+
+[workers]
+<ip> ansible_user=worker1
+<ip> ansible_user=worker2
+
+[master:vars]
+ansible_connection=ssh
+ansible_ssh_pass=<masterSecret>
+ansible_become_pass=<masterRootSecret>
+
+[workers:vars]
+ansible_ssh_pass=<workerSecret>
+ansible_become_pass=<workerRootSecret>
